@@ -1,0 +1,9 @@
+@font-face {
+  font-family:'Space-mono';
+  src: url('./fonts/Nunito/Nunito-VariableFont_wght.ttf') format('truetype');
+  src: url('./fonts/Space_Mono/') format('turetype');
+}
+
+body {
+  font-family: 'Space-mono';
+}
