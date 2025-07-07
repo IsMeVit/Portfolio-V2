@@ -3,25 +3,25 @@ const projects = [
   {
     title: "My portfolio V1",
     description: "This is my first portfolio using HTML, CSS and Javascript after learing for 3months. That's also my first journey to become a web-developer.",
-    image: "/src/assets/Img/Screenshot From 2025-07-07 12-18-34.png",
+    image: "/Img/Screenshot From 2025-07-07 12-18-34.png",
     link: "https://ismevit.github.io/"
   },
   {
     title: "Vue-colculator",
     description: "It's just a basic project.",
-    image: "/src/assets/Img/loading.gif",
+    image: "/Img/loading.gif",
     link: "#"
   },
   {
     title: "UX/UI Design project",
     description: "It's my school project in my UX/UI course.",
-    image: "/src/assets/Img/loading.gif",
+    image: "/Img/loading.gif",
     link: "#"
   },
   {
     title: "Something New...",
     // description: "",
-    image: "/src/assets/Img/loading.gif",
+    image: "/Img/loading.gif",
     // link: "#"
   }
 ]

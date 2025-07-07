@@ -1,5 +1,4 @@
 <script setup>
-import bgImg from '@/assets/Img/fake-bg.jpg';
 import { ref } from 'vue';
 
 const isMenuOpen = ref(false);

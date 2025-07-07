@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
-const words = ['Davit', 'K35h7', 'Ashtro']
+const words = ['Davit', 'Ashtro']
 const currentWord = ref('')
 const Greeting = ref('')
 let wordIndex = 0
