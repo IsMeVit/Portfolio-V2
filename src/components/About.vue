@@ -40,7 +40,7 @@ const getSocialLink = (name) => {
     <div class="flex flex-col md:flex-row md:items-start items-center gap-8 max-w-6xl mx-auto">
       <img
         class="border-4 border-black rounded-2xl w-64 md:w-90 shadow-xl"
-        src="/public/Img/photo_2025-07-02_09-49-00.jpg"
+        src="/Img/photo_2025-07-02_09-49-00.jpg"
         alt="Profile Image"
       />
 
