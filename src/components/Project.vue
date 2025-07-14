@@ -1,7 +1,27 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
 const currentIndex = ref(0)
+
+const totalSlides = computed(() => Math.ceil(projects.length / 1))
+
+const ifisMobile = ref(window.innerWidth < 768)
+
+const updateScreen = () => {
+  ifisMobile.value = window.innerWidth < 768
+}
+
+onMounted(() => {
+  window.addEventListener('resize', updateScreen)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateScreen)
+})
+
+const slideWidth = computed(() => (ifisMobile.value ? 100 : 50)) // 100% if mobile, 50% if md+
+const translateX = computed(() => `translateX(-${currentIndex.value * slideWidth.value}%)`)
+
 
 const projects = [
   {
@@ -39,15 +59,16 @@ const nextSlide = () => {
 </script>
 
 <template>
-  <div class="min-h-screen font-[Space-Mono] text-white ">
+  <div class="min-h-screen w-full overflow-hidden font-[Space-Mono] text-white ">
     <h1 class="text-center text-5xl font-black md:mb-12 min-h-[15vh]">My Projects</h1>
-    
-    <div class="relative max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-0 flex items-center justify-center overflow-hidden">
-      <button @click="prevSlide" class="absolute left-85 md:left-0 z-10 bg-[#1e2431] hover:bg-[#2c3445] p-3 rounded-full">
+  
+    <div class="relative max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-0 flex items-center justify-center ">
+      <button @click="prevSlide" class="absolute left-1 md:left-0 z-10 bg-[#1e2431] hover:bg-[#2c3445] p-3 rounded-full">
         <span class="text-yellow-300">&lt;</span>
       </button>
 
-      <div class="flex transition-transform duration-500 ease-in-out" :style="{ transform: `translateX(-${currentIndex * 100}%)` }">
+    <div class="overflow-hidden w-full max-w-4xl">
+      <div class="flex transition-transform duration-500 ease-in-out" :style="{ transform: translateX }">
         <div v-for="(project, index) in projects" :key="index" class="min-w-full md:min-w-1/2 flex justify-center">
           <div class="bg-[#1e2431] rounded-lg p-6 w-80 mb-6 md:mb-0 shadow-md text-left">
             <h3 class="text-xl font-bold mb-2">{{ project.title }}</h3>
@@ -61,14 +82,13 @@ const nextSlide = () => {
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Right Arrow -->
-      <button @click="nextSlide" class="absolute right-85 md:right-0 z-10 bg-[#1e2431] hover:bg-[#2c3445] p-3 rounded-full">
+      <button @click="nextSlide" class="absolute right-1 md:right-0 z-10 bg-[#1e2431] hover:bg-[#2c3445] p-3 rounded-full">
         <span class="text-yellow-300">&gt;</span>
       </button>
     </div>
 
-    <!-- Dots -->
     <div class="mt-6 flex justify-center space-x-2">
       <span
         v-for="(dot, i) in projects"

@@ -7,7 +7,7 @@ import Project from './components/Project.vue';
 </script>
 
 <template>
-  <div class="relative min-h-screen bg-[#1d2029] text-white flex flex-col items-center justify-center">
+  <div class="relative min-h-screen bg-[#1d2029] text-white flex flex-col items-center justify-center overflow-x-hidden">
     <Navbar/>
     <Home/>
     <Background/>

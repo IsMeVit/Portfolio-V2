@@ -34,8 +34,8 @@ const getSocialLink = (name) => {
 </script>
 
 <template>
-  <div class="font-[Space-Mono] min-h-screen text-white px-6 py-16">
-    <h1 class="text-5xl font-black text-center mb-12">About</h1>
+  <div class="w-full overflow-hidden font-[Space-Mono] min-h-screen text-white px-6 py-16">
+    <h1 class="text-5xl font-black text-center md:text-center mb-12">About</h1>
 
     <div class="flex flex-col md:flex-row md:items-start items-center gap-8 max-w-6xl mx-auto">
       <img
@@ -45,10 +45,10 @@ const getSocialLink = (name) => {
       />
 
       <div class="text-left max-w-2xl">
-        <h2 class="text-3xl font-bold mb-3">
+        <h2 class="text-2xl md:text-3xl font-bold mb-3 ">
           I'm <span class="text-[#9f85ff] font-black">Pich Sovan Dara Davit</span>
         </h2>
-        <p class="text-gray-300 text-lg leading-relaxed mb-6">
+        <p class="text-gray-300  md:text-lg leading-relaxed mb-6">
           I’m a passionate developer focused on building intuitive and high-performing web experiences. My approach is user-first, clean-code driven, and constantly evolving with modern technologies.
         </p>
 
