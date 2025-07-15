@@ -4,6 +4,7 @@ import Background from './components/Background.vue';
 import Navbar from './components/Navbar.vue';
 import About from './components/About.vue';
 import Project from './components/Project.vue';
+import Contact from './components/Contact.vue';
 </script>
 
 <template>
@@ -13,6 +14,8 @@ import Project from './components/Project.vue';
     <Background/>
     <About/>
     <Project/>
+    <Contact/>
+
     
 
   </div>

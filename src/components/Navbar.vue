@@ -4,10 +4,10 @@ import { ref } from 'vue';
 const isMenuOpen = ref(false);
 
 const navItems = [
-  { name: 'Home', href: '#' },
-  { name: 'About', href: '#About' },
-  { name: 'Projects', href: '#' },
-  { name: 'Contact', href: '#' },
+  { name: 'Home', href: '#home' },
+  { name: 'About', href: '#about' },
+  { name: 'Projects', href: '#project' },
+  { name: 'Contact', href: '#contact' },
 ];
 
 const closeMenu = () => {
@@ -53,10 +53,10 @@ const closeMenu = () => {
             class="relative py-2 lg:pb-2 w-full text-center lg:w-auto group"
             @click="closeMenu"
           >
-            <span class="text-lg text-white font-semibold transition-colors duration-300 group-hover:text-[#9f85ff]">
+            <span class="text-lg text-white font-semibold transition-colors duration-300 active:text-[#9f85ff] group-hover:text-[#9f85ff]">
               {{ item.name }}
             </span>
-            <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 h-[2px] bg-[#9f85ff] transition-all duration-300 ease-in-out w-0 group-hover:w-[70%]"></span>
+            <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 h-[2px] bg-[#9f85ff] transition-all duration-300 ease-in-out w-0 group-hover:w-[70%] group-active:w-[30%] "></span>
           </a>
 
           <div class="w-full h-px bg-white/20 lg:hidden"></div>
@@ -68,10 +68,10 @@ const closeMenu = () => {
             class="relative py-2 lg:pb-2 w-full text-center lg:w-auto group"
             @click="closeMenu"
           >
-            <span class="text-lg text-white font-semibold transition-colors duration-300 group-hover:text-[#9f85ff]">
+            <span class="text-lg text-white font-semibold transition-colors duration-300 active:text-[#9f85ff]  hover:text-[#9f85ff]">
               Github
             </span>
-            <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 h-[2px] bg-[#9f85ff] transition-all duration-300 ease-in-out w-0 group-hover:w-[70%]"></span>
+            <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 h-[2px] bg-[#9f85ff] transition-all duration-300 ease-in-out w-0 group-hover:w-[70%] group-active:w-[30%]"></span>
           </a>
         </nav>
       </div>

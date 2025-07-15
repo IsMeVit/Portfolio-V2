@@ -34,7 +34,7 @@ const getSocialLink = (name) => {
 </script>
 
 <template>
-  <div class="w-full overflow-hidden font-[Space-Mono] min-h-screen text-white px-6 py-16">
+  <div id="about" class="w-full overflow-hidden font-[Space-Mono] min-h-screen text-white px-6 py-16">
     <h1 class="text-5xl font-black text-center md:text-center mb-12">About</h1>
 
     <div class="flex flex-col md:flex-row md:items-start items-center gap-8 max-w-6xl mx-auto">
@@ -49,7 +49,7 @@ const getSocialLink = (name) => {
           I'm <span class="text-[#9f85ff] font-black">Pich Sovan Dara Davit</span>
         </h2>
         <p class="text-gray-300  md:text-lg leading-relaxed mb-6">
-          I’m a passionate developer focused on building intuitive and high-performing web experiences. My approach is user-first, clean-code driven, and constantly evolving with modern technologies.
+         I’m a passionate developer on a mission to make the web faster, prettier, and less annoying—one pixel at a time. I believe in user-first design, clean code that future-me won’t hate, and leveling up with the latest tech (because bugs love outdated tools) 
         </p>
 
         <div class="flex gap-5">
@@ -59,7 +59,7 @@ const getSocialLink = (name) => {
             :href="getSocialLink(icon.name)"
             target="_blank"
             rel="noopener noreferrer"
-            class="hover:text-[#9f85ff] transition-colors duration-200"
+            class="hover:text-[#9f85ff]  active:text-[#9f85ff] transition-colors duration-200"
           >
             <svg
               :aria-label="icon.name"
