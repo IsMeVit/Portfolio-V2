@@ -1,7 +1,9 @@
+@import './base.css';
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
 @font-face {
   font-family:'Space-mono';
-  src: url('./fonts/Nunito/Nunito-VariableFont_wght.ttf') format('truetype');
   src: url('./fonts/Space_Mono/') format('turetype');
+
 }
 
 body {
