@@ -59,8 +59,8 @@ function eraseWord() {
 </script>
 
 <template>
-  <div id="home" class="w-full overflow-hidden relative min-h-screen bg-[#1d2029] text-white flex flex-col items-center justify-center sm:text-center" style="font-family: 'Space-mono';">
-    <h1 class="font-[1000] text-6xl md:text-6xl mb-2 min-h-[6vh] whitespace-nowrap border-r-2 border-white sm:text-6xl typewriter-text">
+  <div id="home" class="w-full overflow-hidden relative min-h-screen text-white flex flex-col items-center justify-center sm:text-center font-['Space-mono']">
+  <h1 class="font-[1000] text-6xl md:text-6xl mb-2 min-h-[6vh] whitespace-nowrap sm:text-6xl typewriter-text">
     {{ Greeting }}
     </h1>
     <h2 class="font-bold text-4xl md:text-5xl min-h-[8vh]">

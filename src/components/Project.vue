@@ -56,18 +56,18 @@ const nextSlide = () => {
 </script>
 
 <template>
-  <div class="min-h-screen w-full overflow-hidden font-[Space-Mono] text-white ">
-    <h1 id="project" class="text-center text-5xl font-black md:mb-12 min-h-[15vh]">My Projects</h1>
+  <div class="mt-10 min-h-screen w-full overflow-hidden font-[Space-Mono] text-white ">
+    <h1 id="project" class="text-center text-5xl font-black md:mb-12 min-h-[15vh]">Projects</h1>
   
     <div class="relative max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-0 flex items-center justify-center ">
       <button @click="prevSlide" class="absolute left-1 md:left-0 z-10 p-3 rounded-full">
         <span class="text-yellow-300 bg-[#1e2431] hover:bg-[#452c2c] active:bg-[#452c2c]">&lt;</span>
       </button>
 
-      <div class="overflow-hidden w-full max-w-4xl">
+      <div class="overflow-hidden w-full max-w-4xl ">
         <div class="flex transition-transform duration-500 ease-in-out" :style="{ transform: translateX }">
           <div v-for="(project, index) in projects" :key="index" class="min-w-full md:min-w-1/2 flex justify-center">
-            <div class="bg-[#1e2431] rounded-lg p-6 w-70 md:w-80 mb-6 md:mb-0 shadow-md text-left">
+            <div class="bg-[#1e2431] rounded-lg p-6 w-70 md:w-80 mb-6 md:mb-0 shadow-md text-left ">
               <h3 class="text-xl font-bold mb-2">{{ project.title }}</h3>
               <p class="mb-4">{{ project.description }}</p>
               <div class="flex flex-wrap gap-2 mb-4">

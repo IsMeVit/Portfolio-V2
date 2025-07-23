@@ -25,7 +25,7 @@ const closeMenu = () => {
       <div class="lg:hidden flex justify-end p-4">
         <button
           @click="isMenuOpen = !isMenuOpen"
-          class="p-2 rounded-lg backdrop-blur-md bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-[#9f85ff] focus:ring-opacity-75 transition-all duration-300"
+          class="p-2 rounded-lg backdrop-blur-md bg-white/10 border border-blue-800/20 focus:outline-none focus:ring-2 focus:ring-[#9f85ff] focus:ring-opacity-75 transition-all duration-300"
           aria-label="Toggle navigation menu"
         >
           <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" v-if="!isMenuOpen">
@@ -45,7 +45,7 @@ const closeMenu = () => {
           'max-h-screen opacity-100': isMenuOpen
         }"
       >
-        <nav class="backdrop-blur-md bg-white/10 rounded-2xl px-6 py-3 lg:px-8 shadow-lg border border-white/20 w-full mx-auto lg:w-auto flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-8">
+        <nav class="backdrop-blur-md bg-white/10 rounded-2xl px-6 py-3 lg:px-8 shadow-lg border border-blue-800/20 w-full mx-auto lg:w-auto flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-8">
           <a
             v-for="item in navItems"
             :key="item.name"
