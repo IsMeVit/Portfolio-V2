@@ -60,8 +60,8 @@ const nextSlide = () => {
     <h1 id="project" class="text-center text-5xl font-black md:mb-12 min-h-[15vh]">Projects</h1>
   
     <div class="relative max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-0 flex items-center justify-center ">
-      <button @click="prevSlide" class="absolute left-1 md:left-0 z-10 p-3 rounded-full">
-        <span class="text-yellow-300 bg-[#1e2431] hover:bg-[#452c2c] active:bg-[#452c2c]">&lt;</span>
+      <button @click="prevSlide" class="absolute left-1 md:left-0 z-10 p-3 rounded-full bg-[#1e2431] hover:bg-[#2c3445] active:bg-[#2c3445]">
+        <span class="text-yellow-300  active:bg-[#452c2c]">&lt;</span>
       </button>
 
       <div class="overflow-hidden w-full max-w-4xl ">
@@ -81,7 +81,7 @@ const nextSlide = () => {
         </div>
       </div>
 
-      <button @click="nextSlide" class="absolute right-1 md:right-0 z-10 bg-[#1e2431] hover:bg-[#2c3445] p-3 rounded-full">
+      <button @click="nextSlide" class="absolute right-1 md:right-0 z-10 bg-[#1e2431] hover:bg-[#2c3445] active:bg-[#2c3445] p-3 rounded-full">
         <span class="text-yellow-300 active:bg-[#452c2c]">&gt;</span>
       </button>
     </div>
