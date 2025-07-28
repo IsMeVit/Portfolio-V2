@@ -1,4 +1,6 @@
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue';
+
 const Icons = {
   SocialMedia: [
     {
@@ -32,74 +34,75 @@ const getSocialLink = (name) => {
   }
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  const gmailIconContainer = document.getElementById('gmailIconContainer');
-  const contactFormContainer = document.getElementById('contactFormContainer');
-  const backToIconButton = document.getElementById('backToIconButton'); 
+const showContactForm = ref(false); 
+const isMobile = ref(false); 
 
-  const showForm = () => {
-    if (gmailIconContainer && contactFormContainer) {
-      gmailIconContainer.classList.add('hidden'); 
-      gmailIconContainer.classList.remove('flex');
-      contactFormContainer.classList.remove('hidden');
-      contactFormContainer.classList.add('block'); 
-    }
-  };
+const name = ref('');
+const email = ref('');
+const message = ref('');
+const isSent = ref(false);
 
-  const showIcon = () => {
-    if (gmailIconContainer && contactFormContainer) {
-      contactFormContainer.classList.add('hidden'); 
-      contactFormContainer.classList.remove('block');
-      gmailIconContainer.classList.remove('hidden'); 
-      gmailIconContainer.classList.add('flex'); 
-    }
-  };
+const showForm = () => {
+  showContactForm.value = true;
+};
 
-  if (gmailIconContainer) {
-    gmailIconContainer.addEventListener('click', (event) => {
-      event.preventDefault(); 
-      if (window.innerWidth < 768) { 
-        showForm();
-      }
-    });
+const showIcon = () => {
+  showContactForm.value = false;
+};
+
+const handleResize = () => {
+  isMobile.value = window.innerWidth < 768;
+  if (!isMobile.value) {
+    showContactForm.value = true;
+  } else if (!showContactForm.value) {
+    showContactForm.value = false;
   }
+};
 
-  if (backToIconButton) {
-    backToIconButton.addEventListener('click', () => {
-      if (window.innerWidth < 768) { 
+onMounted(() => {
+  handleResize();
+  window.addEventListener('resize', handleResize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
+});
+
+const sendToTelegram = async () => {
+  const botToken = '8391031826:AAGtkPWVLPNWRl3YwqOTsdYNNkdR3FvvzAA'; 
+  const chatId = '1793887178'; 
+  const text = `📩 New Contact Formn\n\n👤 Name: ${name.value}\n📧 Email: ${email.value}\n📝 Message: ${message.value}`;
+
+  const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text,
+      }),
+    });
+
+    if (res.ok) {
+      isSent.value = true;
+      name.value = '';
+      email.value = '';
+      message.value = '';
+      if (isMobile.value) {
         showIcon();
       }
-    });
+    } else {
+      alert('Something went wrong 😓');
+    }
+  } catch (error) {
+    console.error('Error sending to Telegram:', error);
+    alert('Failed to send message. Please try again.');
   }
-
-  const handleResize = () => {
-      if (window.innerWidth >= 768) { 
-          if (gmailIconContainer) {
-              gmailIconContainer.classList.add('hidden'); 
-              gmailIconContainer.classList.remove('flex');
-          }
-          if (contactFormContainer) {
-              contactFormContainer.classList.remove('hidden');
-              contactFormContainer.classList.add('block');
-          }
-      } else {
-          if (!contactFormContainer.classList.contains('hidden')) {
-              gmailIconContainer.classList.add('hidden');
-              gmailIconContainer.classList.remove('flex');
-          } else {
-              gmailIconContainer.classList.remove('hidden');
-              gmailIconContainer.classList.add('flex');
-              contactFormContainer.classList.add('hidden');
-              contactFormContainer.classList.remove('block');
-          }
-      }
-  };
-
-  window.addEventListener('resize', handleResize);
-
-  handleResize();
-
-});
+};
 </script>
 
 <template>
@@ -110,125 +113,133 @@ document.addEventListener('DOMContentLoaded', () => {
       <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">Let’s Connect</h1>
       <p class="text-lg md:text-xl text-gray-300">Got a project or just want to chat? I'm just a message away.</p>
 
-    <hr class="border-t-2 border-white mt-12">
+      <hr class="border-t-2 border-white mt-12">
     </header>
 
     <section class="mb-20">
-    <h2 class=" text-3xl font-bold text-white uppercase tracking-widest text-center">Find Me Here</h2>
-    <div class="flex gap-5 justify-center items-center px-6 py-5">
-          <a
-            v-for="icon in Icons.SocialMedia"
-            :key="icon.name"
-            :href="getSocialLink(icon.name)"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="hover:text-[#9f85ff]  active:text-[#9f85ff] transition-colors duration-200"
-          >
-            <svg
-              :aria-label="icon.name"
-              role="img"
-              width="42"
-              height="42"
-              :viewBox="icon.viewBox"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-         >
-              <path :d="icon.url"></path> 
-        </svg>
-        </a> 
-    </div>
-    </section>
-    <!-- Contact Form -->
-    <section class="bg-[#2b3245] p-8 md:p-10 rounded-2xl shadow-md relative">
-    <div
-      id="gmailIconContainer"
-      class="md:hidden flex flex-col items-center justify-center py-12 px-4 text-center cursor-pointer"
-    >
-      <a
-        href="#"
-        class="text-white hover:text-red-500 transition-colors duration-200"
-        aria-label="Open contact form"
-      >
-        <svg
-          class="w-20 h-20 mx-auto mb-4"
-          viewBox="0 0 24 24"
-          fill="currentColor"
+      <h2 class=" text-3xl font-bold text-white uppercase tracking-widest text-center">Find Me Here</h2>
+      <div class="flex gap-5 justify-center items-center px-6 py-5">
+        <a
+          v-for="icon in Icons.SocialMedia"
+          :key="icon.name"
+          :href="getSocialLink(icon.name)"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-[#9f85ff] active:text-[#9f85ff] transition-colors duration-200"
         >
-          <path
-            d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
-          />
-        </svg>
-        <span class="text-xl font-semibold">Email Us</span>
-        <p class="text-sm mt-2 text-gray-300">Tap to open form</p>
-      </a>
-    </div>
+          <svg
+            :aria-label="icon.name"
+            role="img"
+            width="42"
+            height="42"
+            :viewBox="icon.viewBox"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path :d="icon.url"></path>
+          </svg>
+        </a>
+      </div>
+    </section>
 
-    <div id="contactFormContainer" class="hidden md:block">
-      <h2 class="text-2xl font-bold mb-8 text-white uppercase tracking-widest">
-        Send a Message
-      </h2>
-      <form action="#" method="POST" class="space-y-6">
-        <div class=" md:hidden text-right mb-4">
-          <button
-            type="button"
-            id="backToIconButton"
-            class="text-gray-400 hover:text-white active:text-white transition-colors duration-200 text-sm"
+    <section class="bg-[#2b3245] p-8 md:p-10 rounded-2xl shadow-md relative">
+      <div
+        v-if="isMobile && !showContactForm"
+        @click="showForm"
+        class="flex flex-col items-center justify-center py-12 px-4 text-center cursor-pointer"
+      >
+        <a
+          href="#"
+          class="text-white hover:text-red-500 transition-colors duration-200"
+          aria-label="Open contact form"
+          @click.prevent
+        >
+          <svg
+            class="w-20 h-20 mx-auto mb-4"
+            viewBox="0 0 240 240"
+            fill="currentColor"
           >
-            &times; Close Form
-          </button>
-        </div>
-        <div>
-          <label for="name" class="block text-sm font-semibold text-white mb-2"
-            >Name</label
-          >
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            class="w-full px-4 py-3 bg-[#1e2431] text-white border border-purple-700 rounded-lg focus:ring-2 focus:ring-white placeholder-gray-400"
-          />
-        </div>
+            <path
+              d="M120,0C53.7,0,0,53.7,0,120s53.7,120,120,120s120-53.7,120-120S186.3,0,120,0z M177.5,82.6l-21.7,102.6
+              c-1.6,7.4-5.9,9.3-11.8,5.8l-32.5-24.1l-15.7,15.1c-1.7,1.7-3.1,3.1-6.3,3.1l2.3-32.6l59.4-53.6c2.6-2.3-0.6-3.6-4-1.3l-73.3,46
+              l-31.6-9.9c-6.9-2.2-7-6.9,1.4-10.2l123.6-47.7C173.2,73.4,179.3,75.9,177.5,82.6z"
+            />
+          </svg>
+          <span class="text-xl font-semibold">Telegram</span>
+          <p class="text-sm mt-2 text-gray-300">Tap to open form</p>
+        </a>
+      </div>
 
-        <div>
-          <label for="email" class="block text-sm font-semibold text-white mb-2"
-            >Email</label
-          >
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            class="w-full px-4 py-3 bg-[#1e2431] text-white border border-purple-700 rounded-lg focus:ring-2 focus:ring-white placeholder-gray-400"
-          />
-        </div>
+      <div v-if="showContactForm" :class="{ 'md:block': true, 'hidden': !showContactForm }">
+        <h2 class="text-2xl font-bold mb-8 text-white uppercase tracking-widest">
+          Send a Message
+        </h2>
+        <form @submit.prevent="sendToTelegram" class="space-y-6">
+          <div v-if="isMobile" class="text-right mb-4">
+            <button
+              type="button"
+              @click="showIcon"
+              class="text-gray-400 hover:text-white active:text-white transition-colors duration-200 text-sm"
+            >
+              &times; Close Form
+            </button>
+          </div>
+          <div>
+            <label for="name" class="block text-sm font-semibold text-white mb-2"
+              >Name</label
+            >
+            <input
+              v-model="name"
+              type="text"
+              id="name"
+              name="name"
+              required
+              class="w-full px-4 py-3 bg-[#1e2431] text-white border border-purple-700 rounded-lg focus:ring-2 focus:ring-white placeholder-gray-400"
+            />
+          </div>
 
-        <div>
-          <label
-            for="message"
-            class="block text-sm font-semibold text-white mb-2"
-            >Message</label
-          >
-          <textarea
-            id="message"
-            name="message"
-            rows="6"
-            required
-            class="w-full px-4 py-3 bg-[#1e2431] text-white border border-purple-700 rounded-lg focus:ring-2 focus:ring-white placeholder-gray-400"
-            placeholder="Let say hi..."
-          ></textarea>
-        </div>
+          <div>
+            <label for="email" class="block text-sm font-semibold text-white mb-2"
+              >Email</label
+            >
+            <input
+              v-model="email"
+              type="email"
+              id="email"
+              name="email"
+              required
+              class="w-full px-4 py-3 bg-[#1e2431] text-white border border-purple-700 rounded-lg focus:ring-2 focus:ring-white placeholder-gray-400"
+            />
+          </div>
 
-        <div>
-          <button
-            type="submit"
-            class="w-full px-6 py-3 text-white bg-purple-600 hover:bg-purple-700 active:bg-purple-700 rounded-lg transition transform hover:scale-105 active:scale-105"
-          >
-            Send 🚀
-          </button>
-        </div>
-      </form>
-    </div>
-  </section>
-</div>
+          <div>
+            <label
+              for="message"
+              class="block text-sm font-semibold text-white mb-2"
+              >Message</label
+            >
+            <textarea
+              v-model="message"
+              id="message"
+              name="message"
+              rows="6"
+              required
+              class="w-full px-4 py-3 bg-[#1e2431] text-white border border-purple-700 rounded-lg focus:ring-2 focus:ring-white placeholder-gray-400"
+              placeholder="Let say hi..."
+            ></textarea>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              class="w-full px-6 py-3 text-white bg-purple-600 hover:bg-purple-700 active:bg-purple-700 rounded-lg transition transform hover:scale-105 active:scale-105"
+            >
+              Send 🚀
+            </button>
+            <p v-if="isSent" class="text-green-400 mt-4 text-center">✅ Message sent!</p>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
 </template>
