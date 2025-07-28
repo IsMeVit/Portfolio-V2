@@ -26,9 +26,9 @@ const getSocialLink = (name) => {
     case "Linkedin":
       return "https://www.linkedin.com/in/yourlinkedinprofile/";
     case "Facebook":
-      return "https://www.facebook.com/yourfacebookprofile/";
+      return "https://web.facebook.com/PichsovandaraDevit";
     case "GitHub":
-      return "https://github.com/yourgithubprofile/";
+      return "https://github.com/IsMeVit";
     default:
       return "#";
   }
