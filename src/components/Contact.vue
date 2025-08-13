@@ -69,8 +69,8 @@ onUnmounted(() => {
 });
 
 const sendToTelegram = async () => {
-  const botToken = '8391031826:AAGtkPWVLPNWRl3YwqOTsdYNNkdR3FvvzAA'; 
-  const chatId = '1793887178'; 
+  const botToken = import.meta.env.TELEGRAM_BOT_TOKEN;
+  const chatId = import.meta.env.TELEGRAM_CHAT_ID;
   const text = `📩 New Contact Formn\n\n👤 Name: ${name.value}\n📧 Email: ${email.value}\n📝 Message: ${message.value}`;
 
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
