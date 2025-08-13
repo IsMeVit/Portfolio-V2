@@ -38,7 +38,7 @@ const showContactForm = ref(false);
 const isMobile = ref(false); 
 
 const name = ref('');
-const email = ref('');
+const telegram = ref('');
 const message = ref('');
 const isSent = ref(false);
 
@@ -69,40 +69,38 @@ onUnmounted(() => {
 });
 
 const sendToTelegram = async () => {
-  const botToken = import.meta.env.TELEGRAM_BOT_TOKEN;
-  const chatId = import.meta.env.TELEGRAM_CHAT_ID;
-  const text = `📩 New Contact Formn\n\n👤 Name: ${name.value}\n📧 Email: ${email.value}\n📝 Message: ${message.value}`;
-
-  const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-
   try {
-    const res = await fetch(url, {
+    const res = await fetch('/api/webhook', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        chat_id: chatId,
-        text,
+        name: name.value,
+        telegram: telegram.value,
+        message: message.value,
       }),
     });
 
     if (res.ok) {
       isSent.value = true;
       name.value = '';
-      email.value = '';
+      telegram.value = '';
       message.value = '';
       if (isMobile.value) {
         showIcon();
       }
-    } else {
-      alert('Something went wrong 😓');
     }
+    //  else {
+    //   const err = await res.json();
+    //   alert(`Error: ${err.message}`);
+    // }
   } catch (error) {
-    console.error('Error sending to Telegram:', error);
+    console.error('Error sending form:', error);
     alert('Failed to send message. Please try again.');
   }
 };
+
 </script>
 
 <template>
@@ -199,14 +197,14 @@ const sendToTelegram = async () => {
           </div>
 
           <div>
-            <label for="email" class="block text-sm font-semibold text-white mb-2"
-              >Email</label
+            <label for="telegram" class="block text-sm font-semibold text-white mb-2"
+              >Telegram</label
             >
             <input
-              v-model="email"
-              type="email"
-              id="email"
-              name="email"
+              v-model="telegram"
+              type="text"
+              id="telegram"
+              name="telegram"
               required
               class="w-full px-4 py-3 bg-[#1e2431] text-white border border-purple-700 rounded-lg focus:ring-2 focus:ring-white placeholder-gray-400"
             />
