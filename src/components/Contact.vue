@@ -42,6 +42,8 @@ const telegram = ref('');
 const message = ref('');
 const isSent = ref(false);
 
+let messageTimeout = null;
+
 const showForm = () => {
   showContactForm.value = true;
 };
@@ -69,6 +71,11 @@ onUnmounted(() => {
 });
 
 const sendToTelegram = async () => {
+  if (messageTimeout) {
+    clearTimeout(messageTimeout);
+    messageTimeout = null;
+  }
+
   try {
     const res = await fetch('/api/webhook', {
       method: 'POST',
@@ -82,6 +89,7 @@ const sendToTelegram = async () => {
       }),
     });
 
+ 
     if (res.ok) {
       isSent.value = true;
       name.value = '';
@@ -90,16 +98,20 @@ const sendToTelegram = async () => {
       if (isMobile.value) {
         showIcon();
       }
+      // Set a timeout to hide the message after 5 seconds
+      messageTimeout = setTimeout(() => {
+        isSent.value = false;
+      }, 5000);
+    } else {
+      // Re-enable the error handling
+      const errorData = await res.json().catch(() => ({}));
+      alert(`Something went wrong 😓: ${errorData.error || res.statusText || 'Unknown error'}`);
     }
-    //  else {
-    //   const err = await res.json();
-    //   alert(`Error: ${err.message}`);
-    // }
   } catch (error) {
     console.error('Error sending form:', error);
     alert('Failed to send message. Please try again.');
   }
-};
+}; 
 
 </script>
 
