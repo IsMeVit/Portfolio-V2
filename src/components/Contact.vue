@@ -41,6 +41,7 @@ const name = ref('');
 const telegram = ref('');
 const message = ref('');
 const isSent = ref(false);
+const honeypot = ref('');
 
 let messageTimeout = null;
 
@@ -71,13 +72,15 @@ onUnmounted(() => {
 });
 
 const sendToTelegram = async () => {
+  const webhookUrl = '/api/webhook';
+
   if (messageTimeout) {
     clearTimeout(messageTimeout);
     messageTimeout = null;
   }
 
   try {
-    const res = await fetch('/api/webhook', {
+    const res = await fetch(webhookUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -86,32 +89,31 @@ const sendToTelegram = async () => {
         name: name.value,
         telegram: telegram.value,
         message: message.value,
+        honeypot: honeypot.value, // Pass the honeypot field
       }),
     });
 
- 
     if (res.ok) {
       isSent.value = true;
       name.value = '';
       telegram.value = '';
       message.value = '';
+      honeypot.value = '';
       if (isMobile.value) {
         showIcon();
       }
-      // Set a timeout to hide the message after 5 seconds
       messageTimeout = setTimeout(() => {
         isSent.value = false;
       }, 5000);
     } else {
-      // Re-enable the error handling
       const errorData = await res.json().catch(() => ({}));
-      alert(`Something went wrong 😓: ${errorData.error || res.statusText || 'Unknown error'}`);
+      alert(`Something went wrong 😓: ${errorData.message || res.statusText || 'Unknown error'}`);
     }
   } catch (error) {
     console.error('Error sending form:', error);
     alert('Failed to send message. Please try again.');
   }
-}; 
+};
 
 </script>
 
@@ -237,6 +239,11 @@ const sendToTelegram = async () => {
               class="w-full px-4 py-3 bg-[#1e2431] text-white border border-purple-700 rounded-lg focus:ring-2 focus:ring-white placeholder-gray-400"
               placeholder="Let say hi..."
             ></textarea>
+          </div>
+
+          <div style="display: none;">
+            <label for="honeypot">If you're a human, don't fill this out</label>
+            <input type="text" id="honeypot" name="honeypot" v-model="honeypot">
           </div>
 
           <div>
