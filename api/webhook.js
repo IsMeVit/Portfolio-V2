@@ -1,6 +1,3 @@
-// File: /api/webhook.js
-
-const requestCounts = new Map();
 const bannedUsers = new Map();
 const COOLDOWN_SECONDS = 30; // Cooldown for each request
 const REQUEST_WINDOW_SECONDS = 30; // The time window to count requests
