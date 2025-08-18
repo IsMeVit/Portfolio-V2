@@ -42,8 +42,11 @@ const telegram = ref('');
 const message = ref('');
 const isSent = ref(false);
 const honeypot = ref('');
+const errorMessage = ref(''); // New state variable
+const isError = ref(false); // New state variable
 
 let messageTimeout = null;
+let errorTimeout = null;
 
 const showForm = () => {
   showContactForm.value = true;
@@ -69,15 +72,21 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize);
+  if (messageTimeout) {
+    clearTimeout(messageTimeout);
+  }
+  if (errorTimeout) {
+    clearTimeout(errorTimeout);
+  }
 });
 
 const sendToTelegram = async () => {
-  const webhookUrl = '/api/webhook';
+  isSent.value = false;
+  isError.value = false;
+  clearTimeout(messageTimeout);
+  clearTimeout(errorTimeout);
 
-  if (messageTimeout) {
-    clearTimeout(messageTimeout);
-    messageTimeout = null;
-  }
+  const webhookUrl = '/api/webhook';
 
   try {
     const res = await fetch(webhookUrl, {
@@ -89,7 +98,7 @@ const sendToTelegram = async () => {
         name: name.value,
         telegram: telegram.value,
         message: message.value,
-        honeypot: honeypot.value, // Pass the honeypot field
+        honeypot: honeypot.value, 
       }),
     });
 
@@ -107,14 +116,21 @@ const sendToTelegram = async () => {
       }, 5000);
     } else {
       const errorData = await res.json().catch(() => ({}));
-      alert(`Something went wrong 😓: ${errorData.message || res.statusText || 'Unknown error'}`);
+      errorMessage.value = errorData.message || res.statusText || 'Unknown error';
+      isError.value = true;
+      errorTimeout = setTimeout(() => {
+        isError.value = false;
+      }, 8000);
     }
   } catch (error) {
     console.error('Error sending form:', error);
-    alert('Failed to send message. Please try again.');
+    errorMessage.value = 'Failed to send message. Please try again.';
+    isError.value = true;
+    errorTimeout = setTimeout(() => {
+      isError.value = false;
+    }, 8000);
   }
 };
-
 </script>
 
 <template>
@@ -254,6 +270,9 @@ const sendToTelegram = async () => {
               Send 🚀
             </button>
             <p v-if="isSent" class="text-green-400 mt-4 text-center">✅ Message sent!</p>
+            <p v-if="isError" class="text-red-400 mt-4 text-center">
+              <span class="font-semibold">Error:</span> {{ errorMessage }}
+            </p>
           </div>
         </form>
       </div>
