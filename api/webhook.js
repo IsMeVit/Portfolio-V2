@@ -11,7 +11,6 @@ export default async function handler(req, res) {
 
   const { name, telegram, message, honeypot } = req.body;
 
-  // 1. Honeypot check: First line of defense against bots.
   if (honeypot) {
     console.log('Bot detected via honeypot field. Request rejected.');
     return res.status(400).json({ message: 'Request rejected.' });
@@ -20,7 +19,6 @@ export default async function handler(req, res) {
   const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   const currentTime = Date.now();
 
-  // 2. Ban Check: Immediately reject requests from a banned IP.
   if (bannedUsers.has(ipAddress)) {
     const banExpiration = bannedUsers.get(ipAddress);
     if (currentTime < banExpiration) {
@@ -31,7 +29,6 @@ export default async function handler(req, res) {
     }
   }
 
-  // 3. Request Cooldown Check: Enforces a minimum time between requests.
   if (userCooldowns.has(ipAddress)) {
     const lastRequestTime = userCooldowns.get(ipAddress);
     const timeSinceLastRequest = (currentTime - lastRequestTime) / 1000;
