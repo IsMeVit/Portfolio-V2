@@ -107,7 +107,7 @@ const sendToTelegram = async () => {
     } else {
       const errorData = await res.json().catch(() => ({}));
       alert(
-        `Something went wrong 😓: /n ${
+        `Something went wrong 😓: \n ${
           errorData.message || res.statusText || "Unknown error"
         }`
       );

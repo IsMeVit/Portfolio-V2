@@ -1,7 +1,3 @@
-// File: /api/webhook.js
-
-// Using a simple in-memory Map for rate limiting. 
-// Note: This will reset on new deployments or after a period of inactivity on some serverless platforms.
 const userCooldowns = new Map();
 const COOLDOWN_SECONDS = 30;
 
@@ -10,19 +6,15 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  // Extract the honeypot field along with the other data
   const { name, telegram, message, honeypot } = req.body;
 
-  // Honeypot check: if the hidden field is filled out, reject the request as it's likely a bot.
   if (honeypot) {
     console.log('Bot detected via honeypot field. Request rejected.');
     return res.status(400).json({ message: 'Request rejected.' });
   }
 
-  // Get the user's IP for rate limiting
   const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
-  // Rate-limiting check:
   if (userCooldowns.has(ipAddress)) {
     const lastRequestTime = userCooldowns.get(ipAddress);
     const timeSinceLastRequest = (Date.now() - lastRequestTime) / 1000;
@@ -33,7 +25,6 @@ export default async function handler(req, res) {
     }
   }
 
-  // Update the user's last request time after passing the check
   userCooldowns.set(ipAddress, Date.now());
 
   if (!name || !telegram || !message) {
@@ -43,7 +34,6 @@ export default async function handler(req, res) {
   const botToken = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
 
-  // Add the '@' symbol for a clean Telegram username
   const text = `📩 New Contact Form\n\n👤 Name: ${name}\n📱 Telegram: @${telegram}\n📝 Message: ${message}`;
 
   try {
@@ -63,7 +53,6 @@ export default async function handler(req, res) {
       throw new Error(`Telegram API error: ${telegramRes.status} - ${errorData.description}`);
     }
 
-    // Return a clean success message to the frontend
     return res.status(200).json({ message: 'Message sent successfully!' });
 
   } catch (error) {

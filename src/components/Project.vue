@@ -28,10 +28,10 @@ const projects = [
     link: "https://ismevit.github.io/"
   },
   {
-    title: "Vue-colculator",
+    title: "Vue-calculator",
     description: "It's just a basic project.",
-    tech: ['Vue.js', 'Vuex', 'Tailwind CSS', 'Firebase'],
-    link: "#"
+    tech: ['Vue.js', 'Vuex', 'Tailwind CSS'],
+    link: "https://calculator-vue-omega.vercel.app/"
   },
   {
     title: "UX/UI Design project",
