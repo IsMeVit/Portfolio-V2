@@ -1,5 +1,12 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, watch } from "vue";
+import { debounce } from 'lodash-es'; 
+
+const TELEGRAM_REGEX = /^[a-zA-Z][a-zA-Z0-9_]{4,31}$/; 
+const MIN_NAME_LENGTH = 2;
+const MAX_NAME_LENGTH = 50;
+const MIN_MESSAGE_LENGTH = 10;
+const MAX_MESSAGE_LENGTH = 1000;
 
 const Icons = {
   SocialMedia: [
@@ -42,7 +49,36 @@ const message = ref("");
 const isSent = ref(false);
 const honeypot = ref("");
 
+const errors = ref({
+  name: "",
+  telegram: "",
+  message: "",
+});
+
 let messageTimeout = null;
+
+const validateForm = () => {
+  let isValid = true;
+  
+  errors.value = { name: "", telegram: "", message: "" };
+
+  if (name.value.length < MIN_NAME_LENGTH || name.value.length > MAX_NAME_LENGTH) {
+    errors.value.name = `Name must be between ${MIN_NAME_LENGTH} and ${MAX_NAME_LENGTH} characters.`;
+    isValid = false;
+  }
+
+  if (!telegram.value.length || !TELEGRAM_REGEX.test(telegram.value)) {
+    errors.value.telegram = "Invalid Telegram username. Must be 5-32 characters and start with a @ symbol.";
+    isValid = false;
+  }
+  
+  if (message.value.length < MIN_MESSAGE_LENGTH || message.value.length > MAX_MESSAGE_LENGTH) {
+    errors.value.message = `Message must be between ${MIN_MESSAGE_LENGTH} and ${MAX_MESSAGE_LENGTH} characters.`;
+    isValid = false;
+  }
+
+  return isValid;
+};
 
 const showForm = () => {
   showContactForm.value = true;
@@ -72,13 +108,17 @@ onUnmounted(() => {
 });
 
 const sendToTelegram = async () => {
+  if(!validateForm()) {
+    return;
+  }
+
   const webhookUrl = "/api/webhook";
 
   if (messageTimeout) {
     clearTimeout(messageTimeout);
-
     messageTimeout = null;
   }
+
   try {
     const res = await fetch(webhookUrl, {
       method: "POST",
@@ -92,6 +132,7 @@ const sendToTelegram = async () => {
         honeypot: honeypot.value,
       }),
     });
+    
     if (res.ok) {
       isSent.value = true;
       name.value = "";
@@ -107,8 +148,8 @@ const sendToTelegram = async () => {
     } else {
       const errorData = await res.json().catch(() => ({}));
       alert(
-        `Something went wrong 😓: \n ${
-          errorData.message || res.statusText || "Unknown error"
+        `Submission Failed: ${
+          errorData.message || res.statusText || "Unknown server error"
         }`
       );
     }
@@ -120,15 +161,14 @@ const sendToTelegram = async () => {
 </script>
 
 <template>
-  <h1 id="contact" class="text-center text-5xl font-black min-h-[20vh]">
-    Contact
+  <h1  class="text-center text-5xl font-black min-h-[20vh]">
   </h1>
 
   <div
     class="container rounded-2xl shadow-2xl mx-auto p-6 md:p-12 max-w-4xl font-[Space-mono] min-h-screen bg-[#1e2431] text-white"
   >
     <header class="text-center mb-20">
-      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
+      <h1 id="contact" class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
         Let’s Connect
       </h1>
 
@@ -235,9 +275,15 @@ l-31.6-9.9c-6.9-2.2-7-6.9,1.4-10.2l123.6-47.7C173.2,73.4,179.3,75.9,177.5,82.6z"
               type="text"
               id="name"
               name="name"
-              required
-              class="w-full px-4 py-3 bg-[#1e2431] text-white border border-purple-700 rounded-lg focus:ring-2 focus:ring-white placeholder-gray-400"
+              :class="{
+                'w-full px-4 py-3 bg-[#1e2431] text-white rounded-lg focus:ring-2 placeholder-gray-400': true,
+                'border border-purple-700 focus:ring-white': !errors.name,
+                'border border-red-500 focus:ring-red-500': errors.name,
+              }"
             />
+            <span v-if="errors.name" class="block text-red-500 text-sm mt-1">
+              {{ errors.name }}
+            </span>
           </div>
 
           <div>
@@ -252,9 +298,15 @@ l-31.6-9.9c-6.9-2.2-7-6.9,1.4-10.2l123.6-47.7C173.2,73.4,179.3,75.9,177.5,82.6z"
               type="text"
               id="telegram"
               name="telegram"
-              required
-              class="w-full px-4 py-3 bg-[#1e2431] text-white border border-purple-700 rounded-lg focus:ring-2 focus:ring-white placeholder-gray-400"
+              :class="{
+                'w-full px-4 py-3 bg-[#1e2431] text-white rounded-lg focus:ring-2 placeholder-gray-400': true,
+                'border border-purple-700 focus:ring-white': !errors.telegram,
+                'border border-red-500 focus:ring-red-500': errors.telegram,
+              }"
             />
+            <span v-if="errors.telegram" class="block text-red-500 text-sm mt-1">
+              {{ errors.telegram }}
+            </span>
           </div>
 
           <div>
@@ -269,15 +321,21 @@ l-31.6-9.9c-6.9-2.2-7-6.9,1.4-10.2l123.6-47.7C173.2,73.4,179.3,75.9,177.5,82.6z"
               id="message"
               name="message"
               rows="6"
-              required
-              class="w-full px-4 py-3 bg-[#1e2431] text-white border border-purple-700 rounded-lg focus:ring-2 focus:ring-white placeholder-gray-400"
+              :class="{
+                'w-full px-4 py-3 bg-[#1e2431] text-white rounded-lg focus:ring-2 placeholder-gray-400': true,
+                'border border-purple-700 focus:ring-white': !errors.message,
+                'border border-red-500 focus:ring-red-500': errors.message,
+              }"
               placeholder="Let say hi..."
             ></textarea>
+
+            <span v-if="errors.message" class="block text-red-500 text-sm mt-1">
+              {{ errors.message}}
+            </span>
           </div>
 
           <div style="display: none">
             <label for="honeypot">If you're a human, don't fill this out</label>
-
             <input
               type="text"
               id="honeypot"
