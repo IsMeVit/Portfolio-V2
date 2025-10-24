@@ -79,7 +79,7 @@ export default async function handler(req, res) {
 
   const escapeName = escapeMarkdownV2(name);
 
-  const text = `📩 New Contact Form\n\n👤 Name: ${name}\n📱 Telegram: @${telegram}\n📝 Message: ${message}`;
+  const text = `📩 New Contact Form\n\n👤 Name: ${name}\n📱 Telegram: ${telegram}\n📝 Message: ${message}`;
 
   try {
     const telegramRes = await fetch(
