@@ -68,7 +68,7 @@ const validateForm = () => {
   }
 
   if (!telegram.value.length || !TELEGRAM_REGEX.test(telegram.value)) {
-    errors.value.telegram = "Invalid Telegram username. Must be 5-32 characters and start with a @ symbol.";
+    errors.value.telegram = "Invalid Telegram username. Must be 5-32 characters and start with letters, Do NOT start with @.";
     isValid = false;
   }
   
@@ -290,7 +290,7 @@ l-31.6-9.9c-6.9-2.2-7-6.9,1.4-10.2l123.6-47.7C173.2,73.4,179.3,75.9,177.5,82.6z"
             <label
               for="telegram"
               class="block text-sm font-semibold text-white mb-2"
-              >Telegram</label
+              >Telegram (Do NOT include @)</label
             >
 
             <input
