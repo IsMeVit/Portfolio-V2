@@ -5,7 +5,7 @@
    <div class="container mx-auto p-8 max-w-2xl font-[Space-Mono] min-h-screen">
     <h1 id="about" class="text-center text-5xl font-black min-h-[3vh]">About</h1>
     <section class="text-center mb-12">
-      <img src="/Img/photo_2025-07-02_09-49-00.jpg" alt="Pich Sovan Dara Davit"
+      <img src="/public/Img/pf.jpg" alt="Pich Sovan Dara Davit"
         class="mx-auto border-4 rounded-2xl border-black shadow-lg scale-90 md:scale-70 mt-3">
       <h1 class="text-2xl md:text-5xl font-extrabold text-white mb-2 leading-tight">Pich Sovan Dara Davit</h1>
       <p class="md:text-xl text-gray-400 font-medium">Frontend Developer | Crafting Intuitive Web Experiences</p>
